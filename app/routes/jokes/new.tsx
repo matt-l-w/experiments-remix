@@ -1,11 +1,15 @@
-import { ActionFunction, json, redirect, useActionData } from "remix";
+import { ActionFunction, LoaderFunction, redirect, useActionData, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
+import { validateLength } from "../../utils/validateLength";
+import { badRequest } from "../../utils/badRequest";
+import { User } from "@prisma/client";
+import { getUserId } from "~/utils/session.server";
 
-function validateLength(thing: string, msg: string) {
-  if (thing.length < 3) return msg;
+export type LoaderData = {
+  userId: User['id']
 }
 
-type ActionData = {
+export type ActionData = {
   formError?: string,
   fieldErrors?: {
     name?: string,
@@ -17,9 +21,10 @@ type ActionData = {
   },
 }
 
-const badRequest = (data: ActionData) => json(data, { status: 400 })
-
 export const action: ActionFunction = async ({ request }) => {
+  const userId = await getUserId(request);
+  if (!userId) return redirect('/login?redirectTo=/jokes/new')
+
   const form = await request.formData();
   const name = form.get('name');
   const content = form.get('content');
@@ -27,10 +32,10 @@ export const action: ActionFunction = async ({ request }) => {
     typeof name !== 'string'
     || typeof content !== 'string'
     ) {
-      return badRequest({ formError: 'Form not submitted correctly' })
+      return badRequest<ActionData>({ formError: 'Form not submitted correctly' })
     }
     
-  const fields = { name, content }
+  const fields = { userId, name, content }
   const fieldErrors = {
     name: validateLength(name, 'The joke\'s name is too short'),
     content: validateLength(content, 'The joke is too short'),
@@ -54,7 +59,7 @@ export default function NewJokeRoute() {
             Name: <input
               type="text"
               name="name"
-              value={actionData?.fields?.name}
+              defaultValue={actionData?.fields?.name}
               aria-invalid={Boolean(actionData?.fieldErrors?.name) || undefined}
               aria-describedby={actionData?.fieldErrors?.name ? "name-error" : undefined}
             />
@@ -73,7 +78,7 @@ export default function NewJokeRoute() {
           <label>
             Content: <textarea
               name="content"
-              value={actionData?.fields?.content}
+              defaultValue={actionData?.fields?.content}
               aria-invalid={Boolean(actionData?.fieldErrors?.content) || undefined}
               aria-describedby={actionData?.fieldErrors?.content ? "content-error" : undefined}
             />
