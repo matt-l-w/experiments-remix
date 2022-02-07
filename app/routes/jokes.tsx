@@ -96,3 +96,11 @@ export default function JokesRoute() {
     </div>
   );
 }
+
+export function ErrorBoundary() {
+  return (
+    <div className="error-container">
+      Uh-oh... Something went wrong! Check back again soon.
+    </div>
+  );
+}
