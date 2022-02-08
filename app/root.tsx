@@ -1,4 +1,4 @@
-import { LinksFunction, Meta, MetaFunction } from "remix";
+import { LinksFunction, Meta, MetaFunction, Scripts } from "remix";
 import { Links, LiveReload, Outlet, useCatch } from "remix";
 
 import globalStylesUrl from "./styles/global.css";
@@ -52,6 +52,7 @@ function Document({
         <meta charSet="utf-8" />
         <Meta />
         <Links />
+        <Scripts />
       </head>
       <body>
         {children}
