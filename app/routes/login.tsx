@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { ActionFunction, LinksFunction, MetaFunction, redirect, useActionData } from "remix";
+import { ActionFunction, Form, LinksFunction, MetaFunction, redirect, useActionData } from "remix";
 import { Link, useSearchParams } from "remix";
 import { badRequest } from "~/utils/badRequest";
 import { createUserSession, login, register } from "~/utils/session.server";
@@ -77,7 +77,7 @@ export default function Login() {
     <div className="container">
       <div className="content" data-light="">
         <h1>Login</h1>
-        <form method="post" aria-invalid={Boolean(actionData?.formError)} aria-describedby={actionData?.formError ? "form-error" : undefined}>
+        <Form method="post" aria-invalid={Boolean(actionData?.formError)} aria-describedby={actionData?.formError ? "form-error" : undefined}>
           <input
             type="hidden"
             name="redirectTo"
@@ -158,7 +158,7 @@ export default function Login() {
           <button type="submit" className="button">
             Submit
           </button>
-        </form>
+        </Form>
       </div>
       <div className="links">
         <ul>

@@ -1,4 +1,4 @@
-import { ActionFunction, LoaderFunction, MetaFunction, redirect } from "remix";
+import { ActionFunction, Form, LoaderFunction, MetaFunction, redirect } from "remix";
 import {
   Link,
   useLoaderData,
@@ -70,12 +70,12 @@ export default function JokeRoute() {
       <p>Here's your hilarious joke:</p>
       <p>{data.joke.content}</p>
       <Link to=".">{data.joke.name} Permalink</Link>
-      <form method="post">
+      <Form method="post">
         <input type="hidden" name="_method" value="delete"/>
         <button type="submit" className="button">
           Delete
         </button>
-      </form>
+      </Form>
     </div>
   );
 }
