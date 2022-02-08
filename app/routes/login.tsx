@@ -1,10 +1,18 @@
 import { User } from "@prisma/client";
-import { ActionFunction, LinksFunction, redirect, useActionData } from "remix";
+import { ActionFunction, LinksFunction, MetaFunction, redirect, useActionData } from "remix";
 import { Link, useSearchParams } from "remix";
 import { badRequest } from "~/utils/badRequest";
 import { createUserSession, login, register } from "~/utils/session.server";
 import { validateLength } from "~/utils/validateLength";
 import stylesUrl from "../styles/login.css";
+
+export const meta: MetaFunction = () => {
+  return {
+    title: "Remix Jokes | Login",
+    description:
+      "Login to submit your own jokes to Remix Jokes!"
+  };
+};
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
